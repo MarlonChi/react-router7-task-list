@@ -6,12 +6,17 @@ import { SidebarTrigger } from "~/components/ui/sidebar";
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Dashboard",
   "/tasks": "Tasks",
+  "/task/new": "Nova Task",
+  "/task/edit": "Editar Task",
 };
 
 export function SiteHeader() {
   const location = useLocation();
 
   const getPageTitle = () => {
+    if (location.pathname.startsWith("/task/edit/")) {
+      return "Edit Task";
+    }
     return ROUTE_TITLES[location.pathname] || "";
   };
 
