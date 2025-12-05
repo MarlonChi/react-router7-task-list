@@ -12,6 +12,8 @@ import {
   IconReport,
   IconSearch,
   IconSettings,
+  IconUserBitcoin,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "~/components/nav-documents";
@@ -32,13 +34,17 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
       title: "Dashboard",
       url: "/",
       icon: IconDashboard,
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: IconUsersGroup,
     },
     {
       title: "Tasks",
