@@ -12,7 +12,6 @@ import {
   IconReport,
   IconSearch,
   IconSettings,
-  IconUserBitcoin,
   IconUsersGroup,
 } from "@tabler/icons-react";
 

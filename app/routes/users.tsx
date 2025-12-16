@@ -1,4 +1,3 @@
-import { turso } from "~/lib/turso";
 import type { Route } from "./+types/users";
 import {
   Table,
@@ -8,29 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { prisma } from "~/lib/prisma";
 
 export async function loader() {
-  const response = await turso.execute("SELECT * FROM users");
-
   return {
-    users: response.rows,
+    users: await prisma.user.findMany(),
   };
 }
 
-interface LoaderData {
-  users: Array<{
-    id: number;
-    email: string;
-    password_hash: string;
-    name: string;
-    created_at: string;
-    updated_at: string;
-    is_active: number;
-    last_login: string | null;
-  }>;
-}
-
-export default function ({ loaderData }: { loaderData: LoaderData }) {
+export default function ({ loaderData }: Route.ComponentProps) {
   return (
     <div className="p-6">
       <Table>
@@ -39,7 +24,7 @@ export default function ({ loaderData }: { loaderData: LoaderData }) {
             <TableHead>ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Is Active</TableHead>
+            <TableHead>Age</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -48,7 +33,7 @@ export default function ({ loaderData }: { loaderData: LoaderData }) {
               <TableCell>{user.id}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.name}</TableCell>
-              <TableCell>{user.is_active ? "Yes" : "No"}</TableCell>
+              <TableCell>{user.age}</TableCell>
             </TableRow>
           ))}
         </TableBody>
