@@ -1,5 +1,5 @@
 import type { Route } from "./+types/api.chat";
-import { getChatCompletions } from "~/services/openai.server";
+import { getChatCompletions } from "~/services/gemini.server";
 import { redirect } from "react-router";
 import { prisma } from "~/lib/prisma";
 import { ChatMessageRole } from "~/generated/prisma/enums";
