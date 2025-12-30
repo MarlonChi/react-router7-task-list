@@ -1,22 +1,12 @@
-# fly.toml app configuration file generated for ai-task-manager on 2025-04-23T18:25:04-03:00
+# fly.toml app configuration file generated for ai-task-manager-solitary-leaf-4785 on 2025-12-16T11:02:09-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'marlon-winter-glade-9318'
-primary_region = 'gig'
+app = 'ai-task-manager-solitary-leaf-4785'
+primary_region = 'gru'
 
 [build]
-
-[processes]
-  app = 'npm run start'
-
-[[mounts]]
-  source = 'data'
-  destination = '/data'
-  auto_extend_size_threshold = 80
-  auto_extend_size_increment = '1GB'
-  auto_extend_size_limit = '10GB'
 
 [http_service]
   internal_port = 3000
@@ -30,3 +20,4 @@ primary_region = 'gig'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 1024

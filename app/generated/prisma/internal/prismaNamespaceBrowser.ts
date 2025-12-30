@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Post: 'Post',
+  Chat: 'Chat',
   Task: 'Task'
 } as const
 
@@ -90,6 +91,17 @@ export const PostScalarFieldEnum = {
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
+export const ChatScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type ChatScalarFieldEnum = (typeof ChatScalarFieldEnum)[keyof typeof ChatScalarFieldEnum]
+
+
 export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -102,7 +114,8 @@ export const TaskScalarFieldEnum = {
   content: 'content',
   chat_history: 'chat_history',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  chat_id: 'chat_id'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]

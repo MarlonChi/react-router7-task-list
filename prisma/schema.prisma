@@ -28,19 +28,34 @@ model Post {
   @@map("posts")
 }
 
+model Chat {
+  id         String   @id @default(uuid())
+  title      String?
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  task Task?
+
+  @@map("chats")
+}
+
 model Task {
   id                        String   @id @default(uuid())
   title                     String
   description               String
-  steps                     String? // Will store as JSON string
+  steps                     String?
   estimated_time            String
   implementation_suggestion String?
-  acceptance_criteria       String? // Will store as JSON string
-  suggested_tests           String? // Will store as JSON string
-  content                   String? // Combined markdown version
-  chat_history              String? // Will store as JSON string
+  acceptance_criteria       String?
+  suggested_tests           String?
+  content                   String?
+  chat_history              String?
   created_at                DateTime @default(now())
   updated_at                DateTime @updatedAt
+
+  chat    Chat   @relation(fields: [chat_id], references: [id])
+  chat_id String @unique
 
   @@map("tasks")
 }

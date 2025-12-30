@@ -50,6 +50,11 @@ export type User = Prisma.UserModel
  */
 export type Post = Prisma.PostModel
 /**
+ * Model Chat
+ * 
+ */
+export type Chat = Prisma.ChatModel
+/**
  * Model Task
  * 
  */

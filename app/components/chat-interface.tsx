@@ -1,32 +1,30 @@
-import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFetcher, useLoaderData } from "react-router";
 
-import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Card } from "~/components/ui/card";
 import { Avatar } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Card } from "~/components/ui/card";
+import type { ChatMessage } from "~/features/tasks/types";
+import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
-
-type Message = {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
-  timestamp: Date;
-};
+import { Send } from "lucide-react";
+import type { loader } from "~/routes/task-new";
 
 export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      content: "Olá! Descreva a tarefa!",
-      role: "assistant",
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state !== "idle";
+  const { chatId, messages } = useLoaderData<typeof loader>();
+
+  // Estado local para mensagens e input
+  const [localMessages, setLocalMessages] =
+    useState<({ pending?: boolean } & ChatMessage)[]>(messages);
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setLocalMessages(messages);
+  }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,58 +32,47 @@ export function ChatInterface() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [localMessages]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: input,
+  // Função de envio otimista
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const value = inputValue.trim();
+    if (!value) return;
+    // Mensagem otimista
+    const optimisticMessage: ChatMessage & { pending: boolean } = {
+      id: `optimistic-${Date.now()}`,
+      content: value,
       role: "user",
       timestamp: new Date(),
+      pending: true,
     };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsLoading(true);
-
-    // Simulate bot response after a delay
-    setTimeout(() => {
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: `Thanks for your message! This is a simulated response to: "${input}"`,
-        role: "assistant",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMessage]);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+    setLocalMessages((prev) => [...prev, optimisticMessage]);
+    setInputValue("");
+    // Foca o input
+    inputRef.current?.focus();
+    // Envia para o backend
+    fetcher.submit(
+      { chatId: chatId ?? "", message: value },
+      { method: "POST", action: "/api/chat" }
+    );
+  }
 
   return (
-    <Card className="flex flex-col h-[600px] w-full border shadow-sm">
-      <div className="p-4 border-b bg-card">
-        <h2 className="text-xl font-semibold">Chat Assistant</h2>
-      </div>
-
-      <ScrollArea className="flex-1 p-4">
+    <Card className="flex flex-col h-[calc(100vh-110px)] w-full border shadow-sm pb-0 pt-0">
+      <ScrollArea className="flex-1 p-4 h-96">
         <div className="space-y-4">
-          {messages.map((message) => (
+          {localMessages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${
+                message.role === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
-                className={`flex gap-3 max-w-[80%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+                className={`flex gap-3 max-w-[80%] ${
+                  message.role === "user" ? "flex-row-reverse" : "flex-row"
+                }`}
               >
                 <Avatar className="h-8 w-8">
                   <div
@@ -107,7 +94,7 @@ export function ChatInterface() {
                 >
                   <p className="text-sm">{message.content}</p>
                   <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString([], {
+                    {new Date(message.timestamp).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
@@ -139,22 +126,21 @@ export function ChatInterface() {
       </ScrollArea>
 
       <div className="p-4 border-t mt-auto">
-        <div className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input type="hidden" name="chatId" value={chatId ?? ""} />
           <Input
-            placeholder="Type a message..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
+            name="message"
+            placeholder="Descreva a tarefa..."
             className="flex-1"
+            ref={inputRef}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoComplete="off"
           />
-          <Button
-            onClick={handleSendMessage}
-            disabled={!input.trim() || isLoading}
-            size="icon"
-          >
+          <Button type="submit" disabled={isLoading} size="icon">
             <Send className="h-4 w-4" />
           </Button>
-        </div>
+        </form>
       </div>
     </Card>
   );
