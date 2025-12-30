@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Post: 'Post',
   Chat: 'Chat',
+  ChatMessage: 'ChatMessage',
   Task: 'Task'
 } as const
 
@@ -94,12 +95,23 @@ export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof Post
 export const ChatScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  content: 'content',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
 
 export type ChatScalarFieldEnum = (typeof ChatScalarFieldEnum)[keyof typeof ChatScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  chat_id: 'chat_id'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
 
 
 export const TaskScalarFieldEnum = {

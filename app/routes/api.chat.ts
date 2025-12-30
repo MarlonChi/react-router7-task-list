@@ -2,6 +2,7 @@ import type { Route } from "./+types/api.chat";
 import { getChatCompletions } from "~/services/openai.server";
 import { redirect } from "react-router";
 import { prisma } from "~/lib/prisma";
+import { ChatMessageRole } from "~/generated/prisma/enums";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -10,10 +11,8 @@ export async function action({ request }: Route.ActionArgs) {
   const chatId = formData.get("chatId") as string;
 
   const chatMessage = {
-    id: Date.now().toFixed(),
     content: userMessage,
-    role: "user" as const,
-    timestamp: new Date(),
+    role: ChatMessageRole.user,
   };
 
   let chat;
@@ -23,40 +22,49 @@ export async function action({ request }: Route.ActionArgs) {
       where: {
         id: chatId,
       },
+      include: {
+        messages: true,
+      },
     });
 
     if (existingChat) {
-      const existingMessages = JSON.parse(existingChat.content);
-
       const answer = {
-        id: Date.now().toFixed(),
-        content: await getChatCompletions([chatMessage]),
-        role: "assistant" as const,
-        timestamp: new Date(),
+        content:
+          (await getChatCompletions([...existingChat.messages, chatMessage])) ??
+          "",
+        role: ChatMessageRole.assistant,
       };
 
-      chat = await prisma.chat.update({
-        where: {
-          id: chatId,
-        },
-        data: {
-          content: JSON.stringify([...existingMessages, chatMessage, answer]),
-        },
+      await prisma.chatMessage.createMany({
+        data: [
+          {
+            chat_id: existingChat.id,
+            ...chatMessage,
+          },
+          { chat_id: existingChat.id, ...answer },
+        ],
       });
     }
   } else {
     const answer = {
-      id: Date.now().toFixed(),
-      content: await getChatCompletions([chatMessage]),
-      role: "assistant" as const,
-      timestamp: new Date(),
+      content: (await getChatCompletions([chatMessage])) ?? "",
+      role: ChatMessageRole.assistant,
     };
 
     chat = await prisma.chat.create({
-      data: {
-        content: JSON.stringify([chatMessage, answer]),
-      },
+      data: {},
     });
+
+    await prisma.chatMessage.createMany({
+      data: [
+        {
+          chat_id: chat.id,
+          ...chatMessage,
+        },
+        { chat_id: chat.id, ...answer },
+      ],
+    });
+
     return redirect(`/task/new?chat=${chat.id}`);
   }
 }

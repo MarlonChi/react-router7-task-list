@@ -173,6 +173,23 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumChatMessageRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChatMessageRole | Prisma.EnumChatMessageRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ChatMessageRole[]
+  notIn?: $Enums.ChatMessageRole[]
+  not?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel> | $Enums.ChatMessageRole
+}
+
+export type EnumChatMessageRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChatMessageRole | Prisma.EnumChatMessageRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ChatMessageRole[]
+  notIn?: $Enums.ChatMessageRole[]
+  not?: Prisma.NestedEnumChatMessageRoleWithAggregatesFilter<$PrismaModel> | $Enums.ChatMessageRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -347,6 +364,23 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumChatMessageRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChatMessageRole | Prisma.EnumChatMessageRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ChatMessageRole[]
+  notIn?: $Enums.ChatMessageRole[]
+  not?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel> | $Enums.ChatMessageRole
+}
+
+export type NestedEnumChatMessageRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChatMessageRole | Prisma.EnumChatMessageRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ChatMessageRole[]
+  notIn?: $Enums.ChatMessageRole[]
+  not?: Prisma.NestedEnumChatMessageRoleWithAggregatesFilter<$PrismaModel> | $Enums.ChatMessageRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChatMessageRoleFilter<$PrismaModel>
 }
 
 

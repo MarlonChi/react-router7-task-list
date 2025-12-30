@@ -387,6 +387,7 @@ export const ModelName = {
   User: 'User',
   Post: 'Post',
   Chat: 'Chat',
+  ChatMessage: 'ChatMessage',
   Task: 'Task'
 } as const
 
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "post" | "chat" | "task"
+    modelProps: "user" | "post" | "chat" | "chatMessage" | "task"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -629,6 +630,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatMessage: {
+      payload: Prisma.$ChatMessagePayload<ExtArgs>
+      fields: Prisma.ChatMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.ChatMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        findMany: {
+          args: Prisma.ChatMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>[]
+        }
+        create: {
+          args: Prisma.ChatMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        createMany: {
+          args: Prisma.ChatMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChatMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.ChatMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        update: {
+          args: Prisma.ChatMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChatMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ChatMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.ChatMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatMessage>
+        }
+        groupBy: {
+          args: Prisma.ChatMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatMessageCountAggregateOutputType> | number
+        }
+      }
+    }
     Task: {
       payload: Prisma.$TaskPayload<ExtArgs>
       fields: Prisma.TaskFieldRefs
@@ -763,12 +838,23 @@ export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof Post
 export const ChatScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  content: 'content',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
 
 export type ChatScalarFieldEnum = (typeof ChatScalarFieldEnum)[keyof typeof ChatScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  chat_id: 'chat_id'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
 
 
 export const TaskScalarFieldEnum = {
@@ -837,6 +923,13 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'ChatMessageRole'
+ */
+export type EnumChatMessageRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatMessageRole'>
     
 
 
@@ -944,6 +1037,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   post?: Prisma.PostOmit
   chat?: Prisma.ChatOmit
+  chatMessage?: Prisma.ChatMessageOmit
   task?: Prisma.TaskOmit
 }
 
