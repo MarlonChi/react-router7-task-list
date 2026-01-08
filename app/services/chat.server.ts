@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI, type Content } from "@google/generative-ai";
 import { ChatMessageRole } from "~/generated/prisma/enums";
+import { prisma } from "~/lib/prisma";
 
 const genAI = new GoogleGenerativeAI(process.env["GOOGLE_API_KEY"] || "");
 
@@ -28,6 +29,11 @@ Saída JSON esperada:
 }
 `;
 
+type Message = {
+  role: ChatMessageRole;
+  content: string;
+};
+
 const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash",
   systemInstruction: SYSTEM_PROMPT,
@@ -36,12 +42,7 @@ const model = genAI.getGenerativeModel({
   },
 });
 
-export async function getChatCompletions(
-  messages: {
-    role: ChatMessageRole;
-    content: string;
-  }[]
-) {
+export async function getChatCompletions(messages: Message[]) {
   const history: Content[] = messages
     .filter((msg) => msg.role !== ChatMessageRole.system)
     .map((msg) => ({
@@ -60,4 +61,20 @@ export async function getChatCompletions(
     console.error("Erro ao chamar Gemini:", error);
     throw error;
   }
+}
+
+export async function createChatMessages(
+  chatId: string,
+  chatMessage: Message,
+  answer: Message
+) {
+  await prisma.chatMessage.createMany({
+    data: [
+      {
+        chat_id: chatId,
+        ...chatMessage,
+      },
+      { chat_id: chatId, ...answer },
+    ],
+  });
 }
