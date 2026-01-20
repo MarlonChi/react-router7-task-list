@@ -3,7 +3,6 @@ import {
   IconCheckupList,
   IconDashboard,
   IconInnerShadowTop,
-  IconUsersGroup,
 } from "@tabler/icons-react";
 
 import { NavMain } from "~/components/nav-main";
@@ -30,13 +29,8 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Users",
-      url: "/users",
-      icon: IconUsersGroup,
-    },
-    {
       title: "Tasks",
-      url: "/task",
+      url: "/tasks",
       icon: IconCheckupList,
     },
   ],

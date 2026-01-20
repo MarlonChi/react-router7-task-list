@@ -8,10 +8,10 @@ import {
 export default [
   layout("layouts/layout.tsx", [
     index("routes/dashboard.tsx"),
-    route("users", "routes/users.tsx"),
-    route("task", "routes/tasks.tsx"),
+    route("tasks", "routes/tasks.tsx"),
     route("task/new", "routes/task-new.tsx"),
     route("task/edit/:id", "routes/task-edit.tsx"),
+    route("task/view/:id", "routes/task-view.tsx"),
   ]),
   route("api/chat", "routes/api.chat.ts"),
 ] satisfies RouteConfig;

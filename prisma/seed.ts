@@ -8,35 +8,7 @@ const adapter = new PrismaBetterSqlite3({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  await prisma.post.deleteMany();
-  await prisma.user.deleteMany();
   await prisma.task.deleteMany();
-
-  // First, create 20 users
-  const users = [];
-  for (let i = 0; i < 20; i++) {
-    const user = await prisma.user.create({
-      data: {
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        age: faker.number.int({ min: 18, max: 80 }),
-      },
-    });
-    users.push(user);
-  }
-
-  // Then, create 60 posts distributed among the users
-  for (let i = 0; i < 60; i++) {
-    const randomUser = users[Math.floor(Math.random() * users.length)];
-    await prisma.post.create({
-      data: {
-        title: faker.lorem.sentence({ min: 4, max: 8 }),
-        content: faker.lorem.paragraphs({ min: 1, max: 3 }),
-        published: faker.datatype.boolean(),
-        author_id: randomUser.id,
-      },
-    });
-  }
 
   // Finally, create 20 tasks
   for (let i = 0; i < 20; i++) {
@@ -70,8 +42,6 @@ async function main() {
   }
 
   console.log("Seed completed! Created:");
-  console.log("- 20 users");
-  console.log("- 60 posts");
   console.log("- 20 tasks");
 }
 
