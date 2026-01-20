@@ -8,6 +8,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/task": "Tasks",
   "/task/new": "Nova Task",
   "/task/edit": "Editar Task",
+  "/chats": "Chats",
 };
 
 export function SiteHeader() {

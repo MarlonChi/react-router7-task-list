@@ -3,6 +3,7 @@ import {
   IconCheckupList,
   IconDashboard,
   IconInnerShadowTop,
+  IconMessage,
 } from "@tabler/icons-react";
 
 import { NavMain } from "~/components/nav-main";
@@ -32,6 +33,11 @@ const data = {
       title: "Tasks",
       url: "/tasks",
       icon: IconCheckupList,
+    },
+    {
+      title: "Chats",
+      url: "/chats",
+      icon: IconMessage,
     },
   ],
 };
