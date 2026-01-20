@@ -7,25 +7,10 @@ datasource db {
   provider = "sqlite"
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  age   Int?
-  name  String?
-  posts Post[]
-
-  @@map("users")
-}
-
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author_id Int
-  author    User    @relation(fields: [author_id], references: [id])
-
-  @@map("posts")
+enum ChatMessageRole {
+  user
+  assistant
+  system
 }
 
 model Chat {
@@ -34,17 +19,11 @@ model Chat {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  task Task?
-
   messages ChatMessage[]
+  task     Task?         @relation(fields: [taskId], references: [id])
+  taskId   String?
 
   @@map("chats")
-}
-
-enum ChatMessageRole {
-  user
-  assistant
-  system
 }
 
 model ChatMessage {
@@ -56,6 +35,8 @@ model ChatMessage {
 
   chat_id String
   chat    Chat   @relation(fields: [chat_id], references: [id])
+
+  task Task?
 
   @@map("chat_messages")
 }
@@ -74,8 +55,9 @@ model Task {
   created_at                DateTime @default(now())
   updated_at                DateTime @updatedAt
 
-  chat    Chat   @relation(fields: [chat_id], references: [id])
-  chat_id String @unique
+  chat_message    ChatMessage? @relation(fields: [chat_message_id], references: [id])
+  chat_message_id String?      @unique
+  chats           Chat[]
 
   @@map("tasks")
 }

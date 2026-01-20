@@ -6,4 +6,6 @@
 /.react-router/
 /build/
 
+/app/generated/prisma
+/app/generated/
 /generated/prisma
